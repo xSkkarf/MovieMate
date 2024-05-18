@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:moviemate/Utils/moviesGrid.dart';
-import 'package:moviemate/models/watchlist.dart';
+import 'package:moviemate/Utils/movies_grid.dart';
+import 'package:moviemate/models/watchlist_model.dart';
 
 class WatchlistDetails extends StatefulWidget{
   final Watchlist watchList;
@@ -12,6 +12,11 @@ class WatchlistDetails extends StatefulWidget{
 }
 
 class _WatchlistDetailsState extends State<WatchlistDetails> {
+
+  void _refresh() {
+    setState(() {});
+  }
+  
   Widget watchListDetailsScreenInit(){
     if(widget.watchList.count == 0){
       return Center(
@@ -21,7 +26,7 @@ class _WatchlistDetailsState extends State<WatchlistDetails> {
         ),
       );
     }else{
-      return MoviesGrid.showWatchList(widget.watchList.movies);
+      return MoviesGrid.showMoviesListDel(widget.watchList, _refresh);
     }
   }
 

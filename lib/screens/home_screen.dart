@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:moviemate/models/watchlist.dart';
 import 'package:moviemate/screens/movies_screen.dart';
-import 'package:moviemate/screens/myWathclist_screen.dart';
+import 'package:moviemate/screens/mywathclists_screen.dart';
 
-List<Watchlist> watchlists = [];
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,11 +14,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   
-
-  // Pages for the bottom navigation bar
   final List<Widget> _pages = [
     const MoviesScreen(),
-    MyWatchlistScreen(),
+    const MyWatchlistScreen(),
   ];
 
   @override

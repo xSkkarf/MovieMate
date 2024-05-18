@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:moviemate/Utils/moviesGrid.dart';
+import 'package:moviemate/Utils/movies_grid.dart';
 import 'package:moviemate/api/api.dart';
-import 'package:moviemate/models/movie.dart';
-import 'package:moviemate/screens/details_screen.dart';
+import 'package:moviemate/models/movie_model.dart';
 
 class MoviesScreen extends StatefulWidget {
   const MoviesScreen({super.key});
@@ -42,17 +41,16 @@ class _MoviesScreenState extends State<MoviesScreen> {
           future: movieList,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              // While data is loading
               return const CircularProgressIndicator();
-            } else if (snapshot.hasError) {
-              // If an error occurred
-              return Text('Error: ${snapshot.error}');
-            } else if (snapshot.hasData && snapshot.data!.isEmpty) {
-              // If data is loaded but empty
+            } 
+            else if (snapshot.hasError) {
+              return const Text('Can\'t load movies, check your internet connection and try again.');
+            } 
+            else if (snapshot.hasData && snapshot.data!.isEmpty) {
               return const Text('No movies yet!', style: TextStyle(fontSize: 20.0));
-            } else {
-              // If data is loaded successfully
-              return MoviesGrid.showWatchList(snapshot.data!);
+            } 
+            else {
+              return MoviesGrid.showMoviesList(snapshot.data!);
             }
           },
         ),

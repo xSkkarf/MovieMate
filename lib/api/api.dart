@@ -1,4 +1,4 @@
-import "package:moviemate/models/movie.dart";
+import "package:moviemate/models/movie_model.dart";
 import "package:http/http.dart" as http;
 import 'dart:convert';
 

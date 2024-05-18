@@ -1,42 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:moviemate/models/movie.dart';
-import 'package:moviemate/screens/home_screen.dart';
+import 'package:moviemate/api/watchlist_service.dart';
+import 'package:moviemate/models/movie_model.dart';
+import 'package:moviemate/models/watchlist_model.dart';
 
 class DetailsScreen extends StatefulWidget {
   final Movie movie;
-  DetailsScreen({super.key, required this.movie});
+  const DetailsScreen({super.key, required this.movie});
 
   @override
   State<DetailsScreen> createState() => _DetailsScreenState();
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
-
-  List<int> selectedWatchlistsIndex = [];
+  List<Watchlist> selectedWatchlists = [];
 
   void showWatchlistDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Add to Watchlist'),
+          title: const Text('Add to Watchlist'),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  for (int i = 0; i < watchlists.length; i++)
+                  for (Watchlist watchlist in WatchlistService.watchlists)
                     CheckboxListTile(
-                      title: Text(watchlists[i].title),
-                      value: selectedWatchlistsIndex.contains(i),
+                      title: Text(watchlist.title),
+                      value: selectedWatchlists.contains(watchlist),
                       onChanged: (bool? value) {
                         setState(() {
                           if (value != null) {
                             if (value) {
-                              selectedWatchlistsIndex.add(i);
+                              selectedWatchlists.add(watchlist);
                             } else {
-                              selectedWatchlistsIndex.remove(i);
+                              selectedWatchlists.remove(watchlist);
                             }
                           }
                         });
@@ -55,8 +55,20 @@ class _DetailsScreenState extends State<DetailsScreen> {
             ),
             TextButton(
               onPressed: () {
-                for(int i = 0; i < selectedWatchlistsIndex.length; i++){
-                  watchlists[selectedWatchlistsIndex[i]].add(widget.movie);
+                for (Watchlist watchlist in selectedWatchlists) {
+                  final SnackBar snackBar;
+                  if (watchlist.add(widget.movie)) {
+                    snackBar = SnackBar(
+                      content: Text("The movie already exists in watchlist: ${watchlist.title}"),
+                      duration: const Duration(seconds: 2),
+                    );
+                  }else{
+                    snackBar = SnackBar(
+                      content: Text("The movie was added successfully to watchlist: ${watchlist.title}"),
+                      duration: const Duration(seconds: 2),
+                    );
+                  }
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 }
                 Navigator.of(context).pop();
               },
@@ -103,14 +115,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
         const SizedBox(
           height: 20,
         ),
-
         Align(
           alignment: Alignment.bottomCenter,
           child: ElevatedButton(
             onPressed: () {
               showWatchlistDialog();
             },
-            child: Text('Add to Watchlist'),
+            child: const Text('Add to Watchlist'),
           ),
         )
       ]),
