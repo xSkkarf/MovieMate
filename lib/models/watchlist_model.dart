@@ -1,4 +1,4 @@
-import 'package:moviemate/api/watchlist_service.dart';
+import 'package:moviemate/services/watchlist_service.dart';
 import 'package:moviemate/models/movie_model.dart';
 
 class Watchlist {
@@ -9,7 +9,7 @@ class Watchlist {
   Watchlist({required this.title});
 
   bool add(Movie movie) {
-    if (movies.contains(movie)) {
+    if (movies.any((movieItem) => movieItem.id == movie.id)) {
       return true;
     }
     movies.add(movie);

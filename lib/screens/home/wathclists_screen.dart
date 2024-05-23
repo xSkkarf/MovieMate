@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:moviemate/api/watchlist_service.dart';
+import 'package:moviemate/services/watchlist_service.dart';
 import 'package:moviemate/models/watchlist_model.dart';
-import 'package:moviemate/screens/watchlist_details_screen.dart';
+import 'package:moviemate/screens/home/watchlist_details_screen.dart';
 
 class MyWatchlistScreen extends StatefulWidget {
   const MyWatchlistScreen({super.key});

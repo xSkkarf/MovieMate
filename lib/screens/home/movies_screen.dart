@@ -1,7 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:moviemate/Utils/movies_grid.dart';
-import 'package:moviemate/api/api.dart';
+import 'package:moviemate/services/api_service.dart';
 import 'package:moviemate/models/movie_model.dart';
 
 class MoviesScreen extends StatefulWidget {
@@ -22,19 +24,39 @@ class _MoviesScreenState extends State<MoviesScreen> {
   }
 
   Future<void> initializeMovieList() async {
-    movieList = Api.getMovieList();
-    movies = await movieList;
+    try {
+      movieList = Api.getMovieList();
+      movies = await movieList;
+    } on SocketException catch (_) {
+      // Handle offline error
+      showOfflineMessage();
+    } catch (e) {
+      // Handle other errors
+      showError(e.toString());
+    }
   }
+
+  void showOfflineMessage() {
+    // You can use a dialog, a snackbar, or set a state to show an offline message on the screen
+    print("You are offline. Please check your internet connection.");
+  }
+
+  void showError(String error) {
+    // Handle and show other types of errors
+    print("An error occurred: $error");
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Movies',
+          'Trending Movies',
           style: GoogleFonts.bebasNeue(fontSize: 30),
         ),
         backgroundColor: Colors.transparent,
+        
       ),
       body: Center(
         child: FutureBuilder<List<Movie>>(

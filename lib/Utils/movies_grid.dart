@@ -1,9 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:moviemate/models/movie_model.dart';
 import 'package:moviemate/models/watchlist_model.dart';
-import 'package:moviemate/screens/movie_details_screen.dart';
+import 'package:moviemate/screens/home/movie_details_screen.dart';
 
-class MoviesGrid{
+class MoviesGrid {
   static Widget showMoviesList(List<Movie> movies) {
     return Container(
       padding: const EdgeInsets.all(8),
@@ -11,11 +12,10 @@ class MoviesGrid{
         scrollDirection: Axis.vertical,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
-            crossAxisSpacing:8,
+            crossAxisSpacing: 8,
             mainAxisSpacing: 8,
-            childAspectRatio: 2 / 3
-        ),
-        itemCount: movies.length,
+            childAspectRatio: 2 / 3),
+        itemCount: movies!.length,
         itemBuilder: (context, index) {
           return SizedBox(
             height: 400,
@@ -30,9 +30,11 @@ class MoviesGrid{
               },
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: Image.network(
-                  'https://image.tmdb.org/t/p/original${movies[index].posterPath}',
+                child: CachedNetworkImage(
+                  imageUrl:
+                      'https://image.tmdb.org/t/p/original${movies[index].posterPath}',
                   fit: BoxFit.cover,
+                  errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
               ),
             ),
@@ -49,10 +51,9 @@ class MoviesGrid{
         scrollDirection: Axis.vertical,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
-            crossAxisSpacing:8,
+            crossAxisSpacing: 8,
             mainAxisSpacing: 8,
-            childAspectRatio: 2 / 3
-        ),
+            childAspectRatio: 2 / 3),
         itemCount: watchlist.movies.length,
         itemBuilder: (context, index) {
           return SizedBox(
@@ -62,12 +63,14 @@ class MoviesGrid{
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => DetailsScreen(movie: watchlist.movies[index]),
+                    builder: (context) =>
+                        DetailsScreen(movie: watchlist.movies[index]),
                   ),
                 );
               },
-              onLongPress: (){
-                deleteDialog(watchlist.movies[index], watchlist, context, callBack);
+              onLongPress: () {
+                deleteDialog(
+                    watchlist.movies[index], watchlist, context, callBack);
               },
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
@@ -82,8 +85,9 @@ class MoviesGrid{
       ),
     );
   }
-  
-  static void deleteDialog(Movie movie, Watchlist watchlist, BuildContext context, VoidCallback callBack) {
+
+  static void deleteDialog(Movie movie, Watchlist watchlist,
+      BuildContext context, VoidCallback callBack) {
     showDialog<void>(
       context: context,
       barrierDismissible: false, // User must tap button to dismiss

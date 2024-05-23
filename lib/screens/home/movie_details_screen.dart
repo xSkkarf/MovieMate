@@ -1,6 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:moviemate/api/watchlist_service.dart';
+import 'package:moviemate/services/watchlist_service.dart';
 import 'package:moviemate/models/movie_model.dart';
 import 'package:moviemate/models/watchlist_model.dart';
 
@@ -23,26 +24,28 @@ class _DetailsScreenState extends State<DetailsScreen> {
           title: const Text('Add to Watchlist'),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  for (Watchlist watchlist in WatchlistService.watchlists)
-                    CheckboxListTile(
-                      title: Text(watchlist.title),
-                      value: selectedWatchlists.contains(watchlist),
-                      onChanged: (bool? value) {
-                        setState(() {
-                          if (value != null) {
-                            if (value) {
-                              selectedWatchlists.add(watchlist);
-                            } else {
-                              selectedWatchlists.remove(watchlist);
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    for (Watchlist watchlist in WatchlistService.watchlists)
+                      CheckboxListTile(
+                        title: Text(watchlist.title),
+                        value: selectedWatchlists.contains(watchlist),
+                        onChanged: (bool? value) {
+                          setState(() {
+                            if (value != null) {
+                              if (value) {
+                                selectedWatchlists.add(watchlist);
+                              } else {
+                                selectedWatchlists.remove(watchlist);
+                              }
                             }
-                          }
-                        });
-                      },
-                    ),
-                ],
+                          });
+                        },
+                      ),
+                  ],
+                ),
               );
             },
           ),
@@ -50,6 +53,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
+                selectedWatchlists.clear();
               },
               child: const Text('Cancel'),
             ),
@@ -71,6 +75,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 }
                 Navigator.of(context).pop();
+                selectedWatchlists.clear();
               },
               child: const Text('Add'),
             ),
@@ -93,11 +98,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
       body: ListView(children: [
         SizedBox(
           height: 300,
-          child: Image.network(
-            'https://image.tmdb.org/t/p/original${widget.movie.backDropPath}',
-            filterQuality: FilterQuality.high,
-            fit: BoxFit.cover,
-          ),
+          child: CachedNetworkImage(
+                  imageUrl: 'https://image.tmdb.org/t/p/original${widget.movie.backDropPath}',
+                  fit: BoxFit.cover,
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                ),
         ),
         Center(
           child: Text(
@@ -123,7 +128,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
             },
             child: const Text('Add to Watchlist'),
           ),
-        )
+        ),
+        const SizedBox(
+          height: 40,
+        ),
       ]),
     );
   }
