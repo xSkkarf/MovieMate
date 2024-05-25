@@ -104,10 +104,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
         ),
-        Center(
-          child: Text(
-            widget.movie.title,
-            style: GoogleFonts.bebasNeue(fontSize: 30),
+        Container(
+          margin: const EdgeInsets.all(15),
+          child: Center(
+            child: Text(
+              widget.movie.title,
+              style: GoogleFonts.bebasNeue(fontSize: 30),
+            ),
           ),
         ),
         Container(

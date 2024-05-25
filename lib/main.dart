@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:moviemate/services/user_provider.dart';
-import 'package:moviemate/services/watchlist_service.dart';
 import 'package:moviemate/Utils/colours.dart';
 import 'package:moviemate/screens/first_screen.dart';
 import 'package:moviemate/firebase_options.dart';
@@ -13,7 +12,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform
   );
-  await WatchlistService.loadWatchlists();
   runApp(const MyApp());
 }
 
@@ -23,7 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => UserProvider(),
+      create: (_) => UserProvider(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'MovieMate',

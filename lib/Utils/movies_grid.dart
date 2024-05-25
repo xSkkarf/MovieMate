@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:moviemate/models/movie_model.dart';
 import 'package:moviemate/models/watchlist_model.dart';
 import 'package:moviemate/screens/home/movie_details_screen.dart';
@@ -15,29 +16,50 @@ class MoviesGrid {
             crossAxisSpacing: 8,
             mainAxisSpacing: 8,
             childAspectRatio: 2 / 3),
-        itemCount: movies!.length,
+        itemCount: movies.length,
         itemBuilder: (context, index) {
-          return SizedBox(
-            height: 400,
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DetailsScreen(movie: movies[index]),
-                  ),
-                );
-              },
-              child: ClipRRect(
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DetailsScreen(movie: movies[index]),
+                ),
+              );
+            },
+            child: Stack(children: [
+              ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: CachedNetworkImage(
                   imageUrl:
                       'https://image.tmdb.org/t/p/original${movies[index].posterPath}',
-                  fit: BoxFit.cover,
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
               ),
-            ),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.black,
+                ),
+                padding: EdgeInsets.all(4),
+                width: 50,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                      size: 12,
+                    ),
+                    SizedBox(width: 5),
+                    Text(
+                      movies[index].voteAverage!.toStringAsFixed(1),
+                      style: GoogleFonts.bebasNeue(fontSize: 12),
+                    )
+                  ],
+                ),
+              ),
+            ]),
           );
         },
       ),

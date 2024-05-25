@@ -12,6 +12,7 @@ class LoginSignupScreen extends StatefulWidget {
 class _LoginSignupScreenState extends State<LoginSignupScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _userNameController = TextEditingController();
   bool isLogin = true;
 
   @override
@@ -26,16 +27,20 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            if(!isLogin) TextField(
+              controller: _userNameController,
+              decoration: const InputDecoration(labelText: 'User Name'),
+            ),
             TextField(
               controller: _emailController,
-              decoration: InputDecoration(labelText: 'Email'),
+              decoration: const InputDecoration(labelText: 'Email'),
             ),
             TextField(
               controller: _passwordController,
-              decoration: InputDecoration(labelText: 'Password'),
+              decoration: const InputDecoration(labelText: 'Password'),
               obscureText: true,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
                 if (isLogin) {
@@ -43,7 +48,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       _emailController.text, _passwordController.text);
                 } else {
                   await userProvider.register(
-                      _emailController.text, _passwordController.text);
+                      _emailController.text, _passwordController.text, _userNameController.text);
                 }
               },
               child: Text(isLogin ? 'Login' : 'Sign Up'),

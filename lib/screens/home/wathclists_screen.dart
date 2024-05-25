@@ -54,6 +54,9 @@ class _MyWatchlistScreenState extends State<MyWatchlistScreen> {
         itemCount: WatchlistService.watchlists.length,
         itemBuilder: (context, index) {
           return GestureDetector(
+            onHorizontalDragEnd: (DragEndDetails d){
+              deleteDialog(index);
+            },
             onTap: () {
               Navigator.push(
                 context,

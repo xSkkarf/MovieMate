@@ -4,6 +4,7 @@ import 'package:moviemate/screens/home/movies_screen.dart';
 import 'package:moviemate/screens/home/search_screen.dart';
 import 'package:moviemate/screens/home/wathclists_screen.dart';
 import 'package:moviemate/services/user_provider.dart';
+import 'package:moviemate/services/watchlist_service.dart';
 import 'package:provider/provider.dart';
 
 
@@ -15,8 +16,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  
-
   int _selectedIndex = 0;
   
   final List<Widget> _pages = [
@@ -25,8 +24,17 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    WatchlistService.loadWatchlists();
+  }
+
+  @override
   Widget build(BuildContext context) {
+
     final userProvider = Provider.of<UserProvider>(context);
+    final user = userProvider.user;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('MovieMate', style: GoogleFonts.bebasNeue(fontSize: 30)),
@@ -61,39 +69,32 @@ class _HomeScreenState extends State<HomeScreen> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            const UserAccountsDrawerHeader(
-              accountName: Text("User Name"),
-              accountEmail: Text("user@example.com"),
-              currentAccountPicture: CircleAvatar(
-                backgroundColor: Colors.white,
-                child: Text(
-                  "U",
-                  style: TextStyle(fontSize: 40.0),
-                ),
-              ),
-              decoration: BoxDecoration(
+            UserAccountsDrawerHeader(
+              accountName: Text(user?.displayName ?? 'No Name'),
+              accountEmail: Text(user?.email ?? 'No Email'),
+              decoration: const BoxDecoration(
                 color: Colors.blue,
               ),
             ),
             ListTile(
-              leading: Icon(Icons.home),
-              title: Text('Home'),
+              leading: const Icon(Icons.home),
+              title: const Text('Home'),
               onTap: () {
                 Navigator.pop(context); // Close the drawer
                 // Handle the navigation
               },
             ),
             ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Settings'),
+              leading: const Icon(Icons.settings),
+              title: const Text('Settings'),
               onTap: () {
                 Navigator.pop(context); // Close the drawer
-                // Handle the navigation
+                print(user?.uid);
               },
             ),
             ListTile(
-              leading: Icon(Icons.logout),
-              title: Text('Log out'),
+              leading: const Icon(Icons.logout),
+              title: const Text('Log out'),
               onTap: () {
                 userProvider.signOut();
               },

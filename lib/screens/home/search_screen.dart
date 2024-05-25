@@ -21,7 +21,7 @@ class _SearchScreenState extends State<SearchScreen> {
     String query = _searchController.text.replaceAll(RegExp(r'\s+'), '+');
 
     try {
-      final results = Api.searchMovies(query);
+      final results = Api.search(query);
       setState(() {
         _searchResults = results;
       });
