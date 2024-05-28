@@ -23,9 +23,8 @@ class AuthService{
       User? user = result.user;
 
       return _userFromFirebaseUser(user);
-    } catch (e) {
-      print(e.toString());
-      return null;
+    } on FirebaseAuthException catch (e) {
+      throw _handleAuthError(e);
     }
   }
 
@@ -49,9 +48,8 @@ class AuthService{
       });
 
       return _userFromFirebaseUser(user);
-    } catch (e) {
-      print(e.toString());
-      return null;
+    } on FirebaseAuthException catch (e) {
+      throw _handleAuthError(e);
     }
   }
 
@@ -73,6 +71,22 @@ class AuthService{
     } catch (e) {
       print(e.toString());
       return null;
+    }
+  }
+
+   // Handle Firebase Auth Errors
+  Exception _handleAuthError(FirebaseAuthException e) {
+    switch (e.code) {
+      case 'user-not-found':
+        return Exception('No user found for that email.');
+      case 'wrong-password':
+        return Exception('Wrong password provided.');
+      case 'email-already-in-use':
+        return Exception('The email address is already in use by another account.');
+      case 'invalid-email':
+        return Exception('The email address is not valid.');
+      default:
+        return Exception('An unknown error occurred. Please try again.');
     }
   }
 

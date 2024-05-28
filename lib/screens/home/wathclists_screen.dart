@@ -70,7 +70,7 @@ class _MyWatchlistScreenState extends State<MyWatchlistScreen> {
             },
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.amber,
+                color: Colors.blue,
                 borderRadius: BorderRadius.circular(10),
               ),
               margin: const EdgeInsets.all(10),
